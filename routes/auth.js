@@ -59,7 +59,7 @@ router.post('/register', async (req, res, next) => {
 		if (!phone) {
 			throw new ExpressError('Phone number required.', 400);
 		}
-		User.register(username, password, first_name, last_name, phone);
+		User.register({ username, password, first_name, last_name, phone });
 		let token = jwt.sign({ username }, SECRET_KEY);
 		User.updateLoginTimestamp(username);
 		return res.json({ token });

@@ -12,23 +12,14 @@ class User {
    *    {username, password, first_name, last_name, phone}
    */
 
-	static async register(username, password, first_name, last_name, phone) {
-		// if (!username || !password) {
-		// 	throw new ExpressError('Username and password required.', 400);
-		// }
-		// if (!first_name || !last_name) {
-		// 	throw new ExpressError('First and last name required.', 400);
-		// }
-		// if (!phone) {
-		// 	throw new ExpressError('Phone number required.', 400);
-		// }
+	static async register({ username, password, first_name, last_name, phone }) {
 		const hashedPass = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
 
 		const results = await db.query(
 			`
 		  INSERT INTO users (username, password, first_name, last_name, phone, join_at, last_login_at)
 		  VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-		  RETURNING username, first_name, last_name, phone `,
+		  RETURNING username, password, first_name, last_name, phone `,
 			[ username, hashedPass, first_name, last_name, phone ]
 		);
 
@@ -76,7 +67,7 @@ class User {
 
 	static async all() {
 		const results = await db.query(`
-    SELECT username, password, first_name, last_name, phone
+    SELECT username, first_name, last_name, phone
     FROM users ORDER BY username`);
 		return results.rows;
 	}
@@ -91,7 +82,10 @@ class User {
    *          last_login_at } */
 
 	static async get(username) {
-		const results = await db.query(`SELECT * FROM users WHERE username = $1`, [ username ]);
+		const results = await db.query(
+			`SELECT username, first_name, last_name, join_at, phone, last_login_at FROM users WHERE username = $1`,
+			[ username ]
+		);
 		// if (!results) {
 		// 	throw new ExpressError('User not found', 404);
 		// }

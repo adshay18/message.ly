@@ -50,7 +50,6 @@ describe('Test User class', function() {
 		let u = await User.get('test');
 		expect(u).toEqual({
 			username: 'test',
-			password: expect.any(String),
 			first_name: 'Test',
 			last_name: 'Testy',
 			phone: '+14155550000',
@@ -64,7 +63,6 @@ describe('Test User class', function() {
 		expect(u).toEqual([
 			{
 				username: 'test',
-				password: expect.any(String),
 				first_name: 'Test',
 				last_name: 'Testy',
 				phone: '+14155550000'
