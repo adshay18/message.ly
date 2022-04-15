@@ -29,9 +29,6 @@ class User {
 	/** Authenticate: is this username/password valid? Returns boolean. */
 
 	static async authenticate(username, password) {
-		// if (!username || !password) {
-		// 	throw new ExpressError('Username and password required.', 400);
-		// }
 		const res = await db.query(
 			`SELECT username, password 
        FROM users
@@ -41,13 +38,10 @@ class User {
 		const user = res.rows[0];
 		if (user) {
 			if (await bcrypt.compare(password, user.password)) {
-				// const token = jwt.sign({ username }, SECRET_KEY);
 				return user, true;
-			} else {
-				return user, false;
 			}
+			return false;
 		}
-		// throw new ExpressError('User not found', 404);
 	}
 
 	/** Update last_login_at for user */

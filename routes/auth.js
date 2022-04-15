@@ -27,7 +27,7 @@ router.post('/login', async (req, res, next) => {
 		);
 		const user = results.rows[0];
 		if (user) {
-			if (User.authenticate(user.username, password)) {
+			if (User.authenticate(username, password)) {
 				User.updateLoginTimestamp(user.username);
 				const token = jwt.sign({ username }, SECRET_KEY);
 				return res.json({ token });
