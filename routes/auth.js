@@ -31,8 +31,9 @@ router.post('/login', async (req, res, next) => {
 				User.updateLoginTimestamp(user.username);
 				const token = jwt.sign({ username }, SECRET_KEY);
 				return res.json({ token });
+			} else {
+				throw new ExpressError('Incorrect password, plesae try again', 400);
 			}
-			throw new ExpressError('Incorrect password, plesae try again', 400);
 		}
 		throw new ExpressError('Username not found', 400);
 	} catch (e) {

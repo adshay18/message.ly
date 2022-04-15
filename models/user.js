@@ -42,6 +42,7 @@ class User {
 			}
 			return false;
 		}
+		return false;
 	}
 
 	/** Update last_login_at for user */

@@ -42,6 +42,10 @@ describe('Auth Routes Test', function() {
 	/** POST /auth/login => token  */
 
 	describe('POST /auth/login', function() {
+		test("won't login w/wrong password", async function() {
+			let response = await request(app).post('/auth/login').send({ username: 'test1', password: 'WRONG' });
+			expect(response.statusCode).toEqual(400);
+		});
 		test('can login', async function() {
 			let response = await request(app).post('/auth/login').send({ username: 'test1', password: 'password' });
 
@@ -50,11 +54,6 @@ describe('Auth Routes Test', function() {
 				username: 'test1',
 				iat: expect.any(Number)
 			});
-		});
-
-		test("won't login w/wrong password", async function() {
-			let response = await request(app).post('/auth/login').send({ username: 'test1', password: 'WRONG' });
-			expect(response.statusCode).toEqual(400);
 		});
 
 		test("won't login w/wrong username", async function() {
